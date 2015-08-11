@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" ng-app="trader">
+
+<head>
+<title>kappa.ws</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.13/angular.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.13/angular-resource.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.13/angular-route.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="lib/angular-stomp.js"></script>
+<link rel="stylesheet" href="main.css"></link>
+<script type="text/javascript" src="main.js"></script>
+</head>
+<body ng-controller="TraderCtrl">
+
+  <h1>Global Kappa per Minute</h1>
+  <table>
+    <tr>
+      <td valign="top" style="height: 288px;">
+        <canvas
+          id="c"
+          style="width: 1050px; height: 288px; background-color: black; border-radius: 5px; border: 1px solid black;"
+          width="1050px"
+          height="288px">
+  </canvas>
+      </td>
+      <td
+        valign="top"
+        rowspan="2">
+        <table class="price-table">
+          <tr ng-repeat="price in prices track by price.emoticon">
+            <!-- ng-style="{'-webkit-animation':'yellow-fade 1s'}" -->
+            <td class="price-price-col">{{price.price}}</td>
+            <td class="price-img-col"><img ng-src="{{emoticonMap[price.emoticon].images[0].url}}"/></td>
+            <td
+              class="price-description-col"
+              ng-style="{'color' : emoticonMap[price.emoticon].color}">{{emoticonMap[price.emoticon].regex}}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  
+  <h1>Top Channels by Current Emotes per Minute</h1>
+  <table class="price-table">
+     <tr>
+       <th style="width: 125px;">Channel</th>
+       <th>KPM</th>
+       <th></th>
+       <th style="width: 95px;"></th>
+       <th colspan="2">Channel Record</th>
+       <th colspan="2">Best Channel's Record</th>
+       <th>Held By</th>
+     </tr>
+     <tr ng-repeat="channelStat in channelStats track by channelStat.channel">
+       <td class="channel-name-col"><a href="http://www.twitch.tv/{{channelStat.channel}}" target="_blank">{{channelStat.channel}}</a></td>
+       <td class="price-price-col">{{channelStat.topEmoteCount}}</td>
+       <td class="price-img-col"><img ng-src="{{emoticonMap[channelStat.topEmote].images[0].url}}"/></td>
+       <td class="price-img-col" ng-style="{'color' : emoticonMap[channelStat.topEmote].color}">{{emoticonMap[channelStat.topEmote].regex}}</td>
+       <td style="padding-left:20px;padding-right:5px;"><meter style="width:200px" min="0" max="{{channelStat.channelRecord.emoteCount}}" value="{{channelStat.topEmoteCount}}"></meter></td>
+       <td class="price-description-col">{{channelStat.channelRecord.emoteCount}}</td>
+       <td style="padding-left:20px;padding-right:5px;"><meter style="width:200px" min="0" max="{{channelStat.topChannelRecord.emoteCount}}" optimum="{{channelStat.channelRecord.emoteCount}}" value="{{channelStat.topEmoteCount}}"></meter></td>
+       <td class="price-description-col">{{channelStat.topChannelRecord.emoteCount}}</td>
+       <td style="padding-left:20px;">{{channelStat.topChannelRecord.channelName}}</td>
+     </tr>
+   </table>
+
+   <hr/>
+
+   
+  <table class="record-container">
+    <tr ng-repeat="recordRow in records">
+      <td ng-repeat="records in recordRow">
+        <h1><img src="{{emoticonMap[records[0].emoteName].images[0].url}}"/> {{emoticonMap[records[0].emoteName].regex}} <img src="{{emoticonMap[records[0].emoteName].images[0].url}}"/></h1>
+        <table class="record-table">
+          <tr>
+            <th>Channel</th>
+            <th>Per Minute</th>
+            <th>Date</th>
+          </tr>
+          <tr ng-repeat="record in records" class="channel-row-{{$index}}">
+            <td>{{record.channelName}}</td>
+            <td>{{record.emoteCount}}</td>
+            <td>{{record.date}}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+
+<hr/>
+<h1>-</h1>
+<!-- 
+<iframe frameborder="0" 
+        scrolling="no" 
+        id="chat_embed" 
+        src="http://twitch.tv/chat/embed?channel=kappamarket&amp;popout_chat=true" 
+        height="500" 
+        width="350">
+</iframe>
+ -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-54415410-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>

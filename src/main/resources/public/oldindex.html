@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html ng-app="trader">
+<head>
+<title>kappa.ws</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.13/angular.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.13/angular-resource.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.13/angular-route.min.js"></script>
+
+<script src="//cdn.sockjs.org/sockjs-0.3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="lib/angular-stomp.js"></script>
+<link
+  rel="stylesheet"
+  href="main.css">
+</head>
+<script
+  type="text/javascript"
+  src="main.js"></script>
+
+<body ng-controller="TraderCtrl">
+
+  <h1>Global Kappa per Minute</h1>
+  <table>
+    <tr>
+      <td valign="top" style="height: 288px;">
+        <canvas
+          id="c"
+          style="width: 1050px; height: 288px; background-color: black; border-radius: 5px; border: 1px solid black;"
+          width="1050px"
+          height="288px">
+  </canvas>
+      </td>
+      <td
+        valign="top"
+        rowspan="2">
+        <table class="price-table">
+          <tr ng-repeat="price in prices track by price.emoticon">
+            <!-- ng-style="{'-webkit-animation':'yellow-fade 1s'}" -->
+            <td class="price-price-col">{{price.price}}</td>
+            <td class="price-img-col"><img ng-src="{{emoticonMap[price.emoticon].images[0].url}}"></td>
+            <td
+              class="price-description-col"
+              ng-style="{'color' : emoticonMap[price.emoticon].color}">{{emoticonMap[price.emoticon].regex}}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  
+  <h1>Top Channels by Current Emotes per Minute</h1>
+  <table class="price-table">
+     <tr>
+       <th style="width: 125px;">Channel</th>
+       <th>KPM</th>
+       <th></th>
+       <th style="width: 95px;"></th>
+       <th colspan="2">Channel Record</th>
+       <th colspan="2">Best Channel's Record</th>
+       <th>Held By</th>
+     </tr>
+     <tr ng-repeat="channelStat in channelStats track by channelStat.channel">
+       <td class="channel-name-col"><a href="http://www.twitch.tv/{{channelStat.channel}}" target="_blank">{{channelStat.channel}}</a></td>
+       <td class="price-price-col">{{channelStat.topEmoteCount}}</td>
+       <td class="price-img-col"><img ng-src="{{emoticonMap[channelStat.topEmote].images[0].url}}"></td>
+       <td class="price-img-col" ng-style="{'color' : emoticonMap[channelStat.topEmote].color}">{{emoticonMap[channelStat.topEmote].regex}}</td>
+       <td style="padding-left:20px;padding-right:5px;"><meter style="width:200px" min="0" max="{{channelStat.channelRecord.emoteCount}}" value="{{channelStat.topEmoteCount}}"></meter></td>
+       <td class="price-description-col">{{channelStat.channelRecord.emoteCount}}</td>
+       <td style="padding-left:20px;padding-right:5px;"><meter style="width:200px" min="0" max="{{channelStat.topChannelRecord.emoteCount}}" optimum="{{channelStat.channelRecord.emoteCount}}" value="{{channelStat.topEmoteCount}}"></meter></td>
+       <td class="price-description-col">{{channelStat.topChannelRecord.emoteCount}}</td>
+       <td style="padding-left:20px;">{{channelStat.topChannelRecord.channelName}}</td>
+     </tr>
+   </table>
+   
+   <hr>
+  
+  <table class="record-container">
+    <tr>
+      <td>
+        <h1><img src="http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-ddc6e3a8732cb50f-25x28.png"> Kappa <img src="http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-ddc6e3a8732cb50f-25x28.png"></h1>
+			  <table class="record-table">
+			  	<tr>
+					  <th>Channel</th>
+					  <th>Per Minute</th>
+					  <th>Date</th>
+			  	</tr>
+			  	<tr ng-repeat="record in records.kappa track by record.id">
+			      <td>{{record.channelName}}</td>
+			      <td>{{record.emoteCount}}</td>
+			      <td>{{record.date}}</td>
+			    </tr>
+			  </table>
+      </td>
+
+      <td>
+        <h1><img src="http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-f6c13c7fc0a5c93d-36x30.png"> BibleThump <img src="http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-f6c13c7fc0a5c93d-36x30.png"></h1>
+			  <table class="record-table">
+			  	<tr>
+					  <th>Channel</th>
+					  <th>Per Minute</th>
+					  <th>Date</th>
+			  	</tr>
+			  	<tr ng-repeat="record in records.biblethump track by record.id">
+			      <td>{{record.channelName}}</td>
+			      <td>{{record.emoteCount}}</td>
+			      <td>{{record.date}}</td>
+			    </tr>
+			  </table>
+      </td>
+
+      <td>
+        <h1><img src="http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-60aa1af305e32d49-23x30.png"> Pogchamp <img src="http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-60aa1af305e32d49-23x30.png"></h1>
+			  <table class="record-table">
+			  	<tr>
+					  <th>Channel</th>
+					  <th>Per Minute</th>
+					  <th>Date</th>
+			  	</tr>
+			  	<tr ng-repeat="record in records.pogchamp track by record.id">
+			      <td>{{record.channelName}}</td>
+			      <td>{{record.emoteCount}}</td>
+			      <td>{{record.date}}</td>
+			    </tr>
+			  </table>
+      </td>
+   </tr>
+   <tr>
+      <td>
+        <h1><img src="http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-3a624954918104fe-19x27.png"> Kreygasm <img src="http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-3a624954918104fe-19x27.png"></h1>
+			  <table class="record-table">
+			  	<tr>
+					  <th>Channel</th>
+					  <th>Per Minute</th>
+					  <th>Date</th>
+			  	</tr>
+			  	<tr ng-repeat="record in records.kreygasm track by record.id">
+			      <td>{{record.channelName}}</td>
+			      <td>{{record.emoteCount}}</td>
+			      <td>{{record.date}}</td>
+			    </tr>
+			  </table>
+      </td>
+
+      <td>
+        <h1><img src="http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-18be1a297459453f-36x30.png"> PJSalt <img src="http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-18be1a297459453f-36x30.png"></h1>
+			  <table class="record-table">
+			  	<tr>
+					  <th>Channel</th>
+					  <th>Per Minute</th>
+					  <th>Date</th>
+			  	</tr>
+			  	<tr ng-repeat="record in records.pjsalt track by record.id">
+			      <td>{{record.channelName}}</td>
+			      <td>{{record.emoteCount}}</td>
+			      <td>{{record.date}}</td>
+			    </tr>
+			  </table>
+      </td>
+
+      <td>
+        <h1><img src="http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-9f276ed33053ec70-32x32.png"> SMOrc <img src="http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-9f276ed33053ec70-32x32.png"></h1>
+			  <table class="record-table">
+			  	<tr>
+					  <th>Channel</th>
+					  <th>Per Minute</th>
+					  <th>Date</th>
+			  	</tr>
+			  	<tr ng-repeat="record in records.smorc track by record.id">
+			      <td>{{record.channelName}}</td>
+			      <td>{{record.emoteCount}}</td>
+			      <td>{{record.date}}</td>
+			    </tr>
+			  </table>
+      </td>
+    </tr>
+  </table>
+  
+
+   <hr>
+
+   
+   
+
+   
+  
+<!-- 
+<object type="application/x-shockwave-flash" 
+        height="500" 
+        width="889" 
+        id="live_embed_player_flash" 
+        data="http://www.twitch.tv/widgets/live_embed_player.swf?channel=kappamarket" 
+        bgcolor="#000000">
+  <param  name="allowFullScreen" 
+          value="true" />
+  <param  name="allowScriptAccess" 
+          value="always" />
+  <param  name="allowNetworking" 
+          value="all" />
+  <param  name="movie" 
+          value="http://www.twitch.tv/widgets/live_embed_player.swf" />
+  <param  name="flashvars" 
+          value="hostname=www.twitch.tv&channel={CHANNEL}&auto_play=true&start_volume={VOLUME}" />
+</object>
+ -->
+               <!-- 
+              <table id="messages-table">
+                <thead>
+                  <tr>
+                    <th>Top Channel</th>
+                    <th>User</th>
+                    <th>Message</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="message in messages track by $index">
+                    <td><span>{{message.channel}}</span></td>
+                    <td><span>{{message.user}}</span></td>
+                    <td><span class="messages-message">{{message.message}}</span></td>
+                  </tr>
+                </tbody>
+              </table>
+              -->
+
+<hr>
+<h1>-</h1>
+<iframe frameborder="0" 
+        scrolling="no" 
+        id="chat_embed" 
+        src="http://twitch.tv/chat/embed?channel=kappamarket&amp;popout_chat=true" 
+        height="500" 
+        width="350">
+</iframe>
+
+ <!-- 
+  <img ng-show="spiker != null" ng-src="{{emoticonMap[spiker.emoticon].images[0].url}}" class="spaz-image" style="left:10%">
+  <img ng-show="spiker != null" ng-src="{{emoticonMap[spiker.emoticon].images[0].url}}"  class="spaz-image" style="left:30%">
+  <img ng-show="spiker != null" ng-src="{{emoticonMap[spiker.emoticon].images[0].url}}"  class="spaz-image" style="left:50%">
+  <img ng-show="spiker != null" ng-src="{{emoticonMap[spiker.emoticon].images[0].url}}"  class="spaz-image" style="left:70%">
+-->
+<!-- 
+<a href="https://github.com/henszey/twitch-emoticon-rate"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+ -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-54415410-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>
