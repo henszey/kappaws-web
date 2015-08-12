@@ -98,7 +98,7 @@ body {
   width:500px !important;
 }
 
-.channel-row-0 {
+.channel-row-0 .highlight {
   font-weight: bold;
   color:gold;
   text-shadow:
@@ -108,7 +108,7 @@ body {
       -1px 1px 0 #000,
        1px 1px 0 #000;
 }
-.channel-row-1 {
+.channel-row-1 .highlight {
   font-weight: bold;
   color:silver;
   text-shadow:
@@ -118,7 +118,7 @@ body {
       -1px 1px 0 #000,
        1px 1px 0 #000;
 }
-.channel-row-2 {
+.channel-row-2 .highlight {
   font-weight: bold;
   color:#965A38;
   text-shadow:
@@ -126,5 +126,14 @@ body {
 }
 
 
+.channel-row-0 a:link,.channel-row-0 a:visited,.channel-row-0 a:active {
+    color: gold;
+}
+.channel-row-1 a:link,.channel-row-1 a:visited,.channel-row-1 a:active {
+    color: silver;
+}
+.channel-row-2 a:link,.channel-row-2 a:visited,.channel-row-2 a:active {
+    color: #965A38;
+}
 
 

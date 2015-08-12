@@ -23,7 +23,7 @@ public class RecordService {
     Map<String, Object> response = Maps.newHashMap();
     
     for (String emote : topEmotes) {
-      response.put(emote, channelRecordRepository.findTopChannelsByEmote(emote));
+      response.put(emote, channelRecordRepository.findTopChannelsByEmote(emote,10));
     }
     
     return response;

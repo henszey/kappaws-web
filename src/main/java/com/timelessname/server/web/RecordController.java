@@ -34,7 +34,7 @@ public class RecordController {
 	@ResponseBody
 	@RequestMapping("/api/emotes/{emote}")
 	public Object recordsz(@PathVariable String emote){
-		return channelRecordRepository.findTopChannelsByEmote(emote);
+		return channelRecordRepository.findTopChannelsByEmote(emote,20);
 	}
 	
 	@ResponseBody

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title th:text="'kappa.ws - ' + ${emote.regex}"></title>
+<link rel="stylesheet" href="/main.css"></link>
+</head>
+<body>
+
+  <h1><img th:src="${emote.url}"/> <span th:text="${emote.regex}"></span> <img th:src="${emote.url}"/></h1>
+  <table class="record-table">
+    <tr>
+      <th>Rank</th>
+      <th>Channel</th>
+      <th>Per Minute</th>
+      <th>Date</th>
+    </tr>
+    <tr th:each="record,status : ${channels}" th:class="'channel-row-' + ${status.index}">
+      <td class="highlight"><span th:text="${status.index + 1}"></span></td>
+      <td class="highlight"><a th:href="@{/channel/{channel}(channel=${record.channelName})}"><span th:text="${record.channelName}"></span></a></td>
+      <td class="highlight"><span th:text="${record.emoteCount}"></span></td>
+      <td><span th:text="${record.date}"></span> GMT</td>
+    </tr>
+  </table>
+
+</body>
+</html>
