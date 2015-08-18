@@ -102,10 +102,10 @@ public class RecordService {
       long time = System.currentTimeMillis();
       Channel channel = channelRepository.findOne(channelRecord.getChannelName());
       time = System.currentTimeMillis() - time;
-      System.out.print(time + ",");
+      //System.out.print(time + ",");
       channelRecord.setChannel(channel);
     }
-    System.out.println();
+    //System.out.println();
     
     
     return map.asMap();

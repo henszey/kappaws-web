@@ -58,7 +58,7 @@ public class HomeController {
 
     model.put("ranks", recordService.getTopRanks());
     
-    System.out.println(System.currentTimeMillis() - time);
+    //System.out.println(System.currentTimeMillis() - time);
 
     return "index";
   }
