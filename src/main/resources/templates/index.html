@@ -88,10 +88,7 @@
     </tr>
     <tr th:each="channels,status : ${ranks}">
       <td style="border-bottom: 1px solid silver; font-weight: bold; text-align: center;">
-      <a th:href="@{/emote/{emote}(emote=${channels.key.regex})}" target="_blank">
-      <img style="width: 39px;" th:src="${channels.key.url}"/>
-      <br /><span th:text="${channels.key.regex}"></span>
-      </a>
+      <a th:href="@{/emote/{emote}(emote=${channels.key.regex})}" target="_blank"><img style="width: 39px;" th:src="${channels.key.url}"/><br /><span th:text="${channels.key.regex}"></span></a>
       </td>
         <td th:class="'channel-row-' + ${status.index}" style=" padding-bottom: 10px; padding-top: 10px;border-bottom: 1px solid silver;text-align:center;font-weight: bold;max-width:120px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;" th:each="channel,status : ${channels.value}">
 	      <img style="width:100px;" th:src="${channel.channel.logo}"/>
