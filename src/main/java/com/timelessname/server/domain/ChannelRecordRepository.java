@@ -22,6 +22,8 @@ public interface ChannelRecordRepository extends CrudRepository<ChannelRecord, L
 	@Query(value = "select * from channel_record where emote_name = ?1 order by emote_count desc limit ?2", nativeQuery = true)
 	List<ChannelRecord> findTopChannelsByEmote(String emote, int limit);
  
-  
+  //@Cacheable("findAllTopRecords")
+  @Query(value = "select * from channel_record where emote_count > 50", nativeQuery = true)
+  List<ChannelRecord> findAllTopRecords();
   
 }

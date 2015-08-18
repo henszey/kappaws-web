@@ -19,6 +19,7 @@ public class CacheConfig {
     GuavaCacheManager guavaCacheManager = new GuavaCacheManager();
     guavaCacheManager.setCacheBuilder(CacheBuilder.newBuilder()
         .expireAfterWrite(60, SECONDS));
+    
     return guavaCacheManager;
   }
   

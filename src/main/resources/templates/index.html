@@ -15,6 +15,8 @@
 <script src="lib/angular-stomp.js"></script>
 <link rel="stylesheet" href="main.css"></link>
 <script type="text/javascript" src="main.js"></script>
+
+<link rel="icon" href="http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-ddc6e3a8732cb50f-25x28.png" />
 </head>
 <body ng-controller="TraderCtrl">
 
@@ -72,7 +74,39 @@
 
    <hr/>
 
-   
+
+
+  <table class="record-container" style="border-collapse: collapse;">
+    <tr>
+      <td></td>
+      <td>1st</td>
+      <td>2nd</td>
+      <td>3rd</td>
+      <td>4th</td>
+      <td>5th</td>
+      <td>6th</td>
+    </tr>
+    <tr th:each="channels,status : ${ranks}">
+      <td style="border-bottom: 1px solid silver; font-weight: bold; text-align: center;">
+      <a th:href="@{/emote/{emote}(emote=${channels.key.regex})}" target="_blank">
+      <img style="width: 39px;" th:src="${channels.key.url}"/>
+      <br /><span th:text="${channels.key.regex}"></span>
+      </a>
+      </td>
+        <td th:class="'channel-row-' + ${status.index}" style=" padding-bottom: 10px; padding-top: 10px;border-bottom: 1px solid silver;text-align:center;font-weight: bold;max-width:120px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;" th:each="channel,status : ${channels.value}">
+	      <img style="width:100px;" th:src="${channel.channel.logo}"/>
+        <br />
+        <span class="highlight" style="font-size: 1.4em;" th:text="${channel.emoteCount}"></span>
+        <br />
+        <span class="highlight"  th:text="${channel.channelName}"></span>
+      
+      
+      </td>
+      
+    </tr>
+  </table>
+
+   <!-- 
   <table class="record-container">
     <tr ng-repeat="recordRow in records">
       <td ng-repeat="records in recordRow">
@@ -92,7 +126,7 @@
       </td>
     </tr>
   </table>
-
+ -->
 
 <hr/>
 <h1>-</h1>

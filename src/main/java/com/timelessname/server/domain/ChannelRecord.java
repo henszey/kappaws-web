@@ -7,13 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
-public class ChannelRecord {
+public class ChannelRecord implements Comparable<ChannelRecord> {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -33,6 +34,8 @@ public class ChannelRecord {
 	@Column
 	Date date;
 
+	@Transient
+	Channel channel;
 	
 	
 	public String getChannelName() {
@@ -75,8 +78,18 @@ public class ChannelRecord {
 		this.id = id;
 	}
 
+  public Channel getChannel() {
+    return channel;
+  }
 
-	
+  public void setChannel(Channel channel) {
+    this.channel = channel;
+  }
+
+  @Override
+  public int compareTo(ChannelRecord o) {
+    return this.emoteCount - o.emoteCount;
+  }
 	
 	
 }

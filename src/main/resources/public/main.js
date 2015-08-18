@@ -108,6 +108,7 @@ angular.module('trader', [ 'AngularStomp' ]).controller('TraderCtrl', function($
   	$scope.records.smorc = data;
   });
   */
+  /*
   $http.get('/api/emotes').success(function(data) {
   	$scope.records = [
   	                  [data.kappa,data.biblethump,data.pogchamp],
@@ -116,6 +117,7 @@ angular.module('trader', [ 'AngularStomp' ]).controller('TraderCtrl', function($
   	
   	console.log(data.trihard);
   });
+  */
 
   // ///////////////////////Charting Disaster Area//////////////////////////////
   var canvas = document.getElementById("c");

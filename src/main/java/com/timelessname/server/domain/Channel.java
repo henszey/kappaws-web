@@ -27,6 +27,9 @@ public class Channel {
 	@Column
 	Date lastSeen;
 	
+	@Column
+	String logo;
+	
 	@ElementCollection()
   @MapKeyColumn(length=50,name = "emoteName")
 	@OneToMany(cascade=CascadeType.ALL , mappedBy="channelName")
@@ -63,6 +66,14 @@ public class Channel {
 	public void setRecords(Map<String, ChannelRecord> records) {
 		this.records = records;
 	}
+
+  public String getLogo() {
+    return logo;
+  }
+
+  public void setLogo(String logo) {
+    this.logo = logo;
+  }
 	
 	
 
