@@ -85,13 +85,26 @@ public class PricingService {
       return;
     }
 
+//    boolean changes = false;
+//    for (int i = 0; i < newStats.size() && i < channelStats.size(); i++) {
+//      if (!newStats.get(i).equals(channelStats.get(i))) {
+//        changes = true;
+//        break;
+//      }
+//    }
     boolean changes = false;
     for (int i = 0; i < newStats.size() && i < channelStats.size(); i++) {
-      if (!newStats.get(i).equals(channelStats.get(i))) {
+      if (!newStats.get(i).getChannel().equals(channelStats.get(i).getChannel())) {
+        changes = true;
+        break;
+      }
+      if (Math.abs(newStats.get(i).getTopEmoteCount() - channelStats.get(i).getTopEmoteCount()) > 2) {
         changes = true;
         break;
       }
     }
+    
+    
     if (changes) {
 
       for (ChannelStats channelStats : newStats) {
